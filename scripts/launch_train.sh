@@ -21,7 +21,7 @@ overrides=()
 [[ -z "${MAX_TRAIN_STEPS:-}" ]] || overrides+=(--trainer.max_train_steps "$MAX_TRAIN_STEPS")
 [[ -z "${LOG_EVERY_STEPS:-}" ]] || overrides+=(--trainer.log_every_steps "$LOG_EVERY_STEPS")
 [[ -z "${SAVE_EVERY_STEPS:-}" ]] || overrides+=(--trainer.save_every_steps "$SAVE_EVERY_STEPS")
-if [[ "$module" == tcla.training.train_action_space_version3 ]]; then
+if [[ "$module" == tcla.training.train_action_space ]]; then
   [[ -z "${NUM_FREQS:-}" ]] || overrides+=(--num_freqs "$NUM_FREQS")
 fi
 cd "$root"

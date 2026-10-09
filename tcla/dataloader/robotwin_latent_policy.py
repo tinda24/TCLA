@@ -1,4 +1,4 @@
-"""RoboTwin / RMBench policy dataset aligned with ActionAutoencoder version3 stats."""
+"""RoboTwin latent policy dataset aligned with action autoencoder statistics."""
 
 from __future__ import annotations
 
@@ -13,7 +13,7 @@ from tcla.dataloader.frequency_encoding import trajectory_to_frequency
 from tcla.dataloader.robotwin import RoboTwinPolicyDataset
 
 
-class RoboTwinPolicyVersion3Dataset(RoboTwinPolicyDataset):
+class RoboTwinLatentPolicyDataset(RoboTwinPolicyDataset):
     """Policy windows with mean/std action norm and DCT ``traj_a_freq`` freq-norm."""
 
     def __init__(self, *args, fft_type: str = "dct", **kwargs):
@@ -22,12 +22,12 @@ class RoboTwinPolicyVersion3Dataset(RoboTwinPolicyDataset):
 
     def _load_action_ae_stats(self) -> Dict[str, np.ndarray]:
         if not self.action_ae_stats_path:
-            raise ValueError("version3 policy training requires action_ae_stats_path.")
+            raise ValueError("Latent policy training requires action_ae_stats_path.")
         with open(self.action_ae_stats_path, "r", encoding="utf-8") as handle:
             stats = json.load(handle)
         if "action_mean" not in stats or "action_std" not in stats:
             raise KeyError(
-                f"version3 policy expects action_mean/action_std in {self.action_ae_stats_path}"
+                f"Latent policy expects action_mean/action_std in {self.action_ae_stats_path}"
             )
         loaded = {
             "action_mean": np.asarray(stats["action_mean"], dtype=np.float32),

@@ -13,7 +13,7 @@ The default language encoder is MiniLM (384 dimensions); configure local weights
 through `paths.language_model`. Use the same language embeddings for AE and policy.
 
 ```bash
-bash examples/franka/ae_train_files/train_version3.sh 0
+bash examples/franka/ae_train_files/train_ae.sh 0
 ```
 
 Set `paths.action_ae.franka` to the resulting AE run directory, then train a policy:

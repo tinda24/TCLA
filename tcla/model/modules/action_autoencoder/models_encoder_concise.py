@@ -1,7 +1,3 @@
-"""
-有跳变问题后更新的版本。
-"""
-
 from typing import Optional
 
 import torch

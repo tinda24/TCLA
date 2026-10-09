@@ -1,6 +1,6 @@
 # TCLA
 
-Action autoencoder v3 with ACT and Baku policies for RoboTwin and Franka.
+Action autoencoder with ACT and Baku policies for RoboTwin and Franka.
 
 ## Environment
 
@@ -49,7 +49,7 @@ The encoder, decoder, dynamics, and progress losses retain the reference model's
 parameterization. Learning rates are constant, as in the reference configuration.
 
 ```bash
-bash examples/Robotwin_ae/train_files/train_version3.sh 0
+bash examples/Robotwin_ae/train_files/train_ae.sh 0
 bash examples/Robotwin/train_files/run_latent_baku_robotwin_train.sh 0
 bash examples/Robotwin/train_files/run_raw_baku_robotwin_train.sh 0
 bash examples/Robotwin/train_files/run_latent_act_robotwin_train.sh 0
@@ -62,7 +62,7 @@ when running concurrent jobs. Environment overrides include `BATCH_SIZE`,
 (AE training). Additional configuration overrides use `--key value`:
 
 ```bash
-bash examples/Robotwin_ae/train_files/train_version3.sh 0 --trainer.max_train_steps 100
+bash examples/Robotwin_ae/train_files/train_ae.sh 0 --trainer.max_train_steps 100
 ```
 
 Validation losses are recorded as CSV; latent trajectories are plotted with t-SNE.

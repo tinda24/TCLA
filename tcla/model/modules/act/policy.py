@@ -8,7 +8,7 @@ import torch.nn.functional as F
 import torchvision.transforms as transforms
 from omegaconf import OmegaConf
 
-from tcla.model.framework import action_autoencoder_version3  # noqa: F401
+from tcla.model.framework import action_autoencoder  # noqa: F401
 from tcla.model.modules.act.detr.main import build_ACT_model_and_optimizer
 from tcla.model.tools import FRAMEWORK_REGISTRY
 

@@ -2,7 +2,7 @@ import time
 from pathlib import Path
 
 import torch
-from tcla.training.action_ae_evaluator_version3 import ActionAETrainingEvaluatorVersion3
+from tcla.training.action_ae_evaluator import ActionAETrainingEvaluator
 from tcla.training.trainer_utils import TrainerUtils
 
 
@@ -38,7 +38,7 @@ class ActionSpaceTrainer(TrainerUtils):
         )
         self.evaluator = None
         if self.accelerator.is_main_process and self.train_mode_eval_every_steps > 0:
-            self.evaluator = ActionAETrainingEvaluatorVersion3(
+            self.evaluator = ActionAETrainingEvaluator(
                 cfg=cfg,
                 dataset=dataset,
                 run_dir=self.run_dir,

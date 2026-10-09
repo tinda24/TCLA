@@ -18,9 +18,9 @@ from omegaconf import OmegaConf
 from torch.utils.data import DataLoader
 from tcla.configuration import load_training_config
 
-from tcla.dataloader.franka import FrankaPolicyDataset, FrankaPolicyVersion3Dataset
+from tcla.dataloader.franka import FrankaPolicyDataset, FrankaLatentPolicyDataset
 from tcla.dataloader.robotwin import RoboTwinPolicyDataset, collate_fn
-from tcla.dataloader.robotwin_policy_version3 import RoboTwinPolicyVersion3Dataset
+from tcla.dataloader.robotwin_latent_policy import RoboTwinLatentPolicyDataset
 from tcla.model.framework import act_policy, baku_policy  # noqa: F401
 from tcla.model.tools import FRAMEWORK_REGISTRY
 from tcla.training.trainer_policy import PolicyTrainer
@@ -33,9 +33,9 @@ from tcla.training.trainer_utils.trainer_tools import (
 
 DATASET_REGISTRY = {
     "robotwin_policy": (RoboTwinPolicyDataset, collate_fn),
-    "robotwin_policy_version3": (RoboTwinPolicyVersion3Dataset, collate_fn),
+    "robotwin_latent_policy": (RoboTwinLatentPolicyDataset, collate_fn),
     "franka_policy": (FrankaPolicyDataset, collate_fn),
-    "franka_policy_version3": (FrankaPolicyVersion3Dataset, collate_fn),
+    "franka_latent_policy": (FrankaLatentPolicyDataset, collate_fn),
 }
 
 
@@ -59,9 +59,9 @@ def load_config(config_yaml, overrides):
     cfg = load_training_config(config_yaml, normalize_overrides(overrides))
     if cfg.framework.action_space == "latent":
         ae = OmegaConf.load(cfg.framework.action_ae_config).framework
-        if ae.name != "ActionAutoencoder_version3":
+        if ae.name != "ActionAutoencoder":
             raise ValueError(
-                "Latent policies require an AE v3 checkpoint and its saved config.yaml."
+                "Latent policies require an ActionAutoencoder checkpoint and its saved config.yaml."
             )
         cfg.chunk_size = int(ae.chunk_size)
         cfg.latent_action_dim = int(ae.latent_action_dim)

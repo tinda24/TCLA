@@ -12,7 +12,7 @@ from tcla.model.modules.action_autoencoder.factory import (
 from tcla.dataloader.frequency_encoding import trajectory_to_frequency
 
 
-@FRAMEWORK_REGISTRY.register("ActionAutoencoder_version3")
+@FRAMEWORK_REGISTRY.register("ActionAutoencoder")
 class ActionAutoencoder(nn.Module):
     def __init__(
         self,
@@ -406,7 +406,7 @@ class ActionAutoencoder(nn.Module):
                 )
             if task_emb is None:
                 raise ValueError(
-                    "task_emb is required for version3 perceiver progress prediction."
+                    "task_emb is required for perceiver progress prediction."
                 )
             freq = self.trajectory_to_frequency(trajectory).unsqueeze(0)
             task_batch = task_emb.unsqueeze(0) if task_emb.ndim == 1 else task_emb

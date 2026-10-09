@@ -23,7 +23,7 @@ action_ae:
   stats_path: ${paths.action_ae.franka}/dataset_statistics.json
 datasets:
   action_data:
-    dataset_py: franka_policy_version3
+    dataset_py: franka_latent_policy
     per_device_batch_size: 32
     num_workers: 0
     pin_memory: false

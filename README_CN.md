@@ -2,7 +2,7 @@
 
 [English](README.md)
 
-面向 RoboTwin 和 Franka 的动作自编码器 v3，以及 ACT 和 Baku 策略。
+面向 RoboTwin 和 Franka 的动作自编码器，以及 ACT 和 Baku 策略。
 
 ## 环境配置
 
@@ -47,7 +47,7 @@ paths:
 模型各模块和损失项沿用参考实现的参数设置，学习率与参考配置一致，保持恒定。
 
 ```bash
-bash examples/Robotwin_ae/train_files/train_version3.sh 0
+bash examples/Robotwin_ae/train_files/train_ae.sh 0
 bash examples/Robotwin/train_files/run_latent_baku_robotwin_train.sh 0
 bash examples/Robotwin/train_files/run_raw_baku_robotwin_train.sh 0
 bash examples/Robotwin/train_files/run_latent_act_robotwin_train.sh 0
@@ -60,7 +60,7 @@ bash examples/Robotwin/train_files/run_raw_act_robotwin_train.sh 0
 其他配置项可通过 `--key value` 的形式覆盖：
 
 ```bash
-bash examples/Robotwin_ae/train_files/train_version3.sh 0 --trainer.max_train_steps 100
+bash examples/Robotwin_ae/train_files/train_ae.sh 0 --trainer.max_train_steps 100
 ```
 
 验证损失保存为 CSV 文件，潜变量轨迹使用 t-SNE 绘制。

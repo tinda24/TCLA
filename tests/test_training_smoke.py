@@ -14,9 +14,9 @@ from accelerate import Accelerator
 from torch.utils.data import DataLoader
 
 from tcla.configuration import PROJECT_ROOT, load_paths
-from tcla.training import train_action_space_version3 as ae_train
+from tcla.training import train_action_space as ae_train
 from tcla.training import train_policy
-from tcla.training.trainer_action_space_version3 import ActionSpaceTrainer
+from tcla.training.trainer_action_space import ActionSpaceTrainer
 from tcla.training.trainer_policy import PolicyTrainer
 from deployment.model_server.server_policy import load_tcla_policy
 from deployment.model_server.tools import msgpack_numpy
@@ -52,9 +52,9 @@ class TrainingSmokeTests(unittest.TestCase):
     def make_ae(self, robot):
         franka = robot == "franka"
         path = PROJECT_ROOT / (
-            "examples/franka/ae_train_files/train_version3.yaml"
+            "examples/franka/ae_train_files/train_ae.yaml"
             if franka
-            else "examples/Robotwin_ae/train_files/train_version3.yaml"
+            else "examples/Robotwin_ae/train_files/train_ae.yaml"
         )
         cfg = ae_train.load_config(path, [])
         cfg.datasets.action_data.dataset.path = str(
@@ -86,7 +86,7 @@ class TrainingSmokeTests(unittest.TestCase):
             OmegaConf.resolve(cfg)
             self.assertIn(
                 cfg.framework.name,
-                {"ActionAutoencoder_version3", "ACTPolicy", "BakuPolicy"},
+                {"ActionAutoencoder", "ACTPolicy", "BakuPolicy"},
             )
 
     def test_ae_forward_backward_for_both_robots(self):

@@ -1,4 +1,4 @@
-run_name: Franka_ae_version3_bins48
+run_name: Franka_ae_bins48
 run_root_dir: ${paths.output.franka_ae}
 seed: 0
 accelerator:
@@ -36,7 +36,7 @@ datasets:
       sentence_encoder_device: cpu
       lang_dim: 384
 framework:
-  name: ActionAutoencoder_version3
+  name: ActionAutoencoder
   encoder_type: tf_seq_cnn
   decoder_type: tf_attn_w_nonScalarPhase
   dynamics_model_type: direct_flow_w_nonScalarPhase

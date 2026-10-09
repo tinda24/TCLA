@@ -16,9 +16,9 @@ from omegaconf import OmegaConf
 from torch.utils.data import DataLoader
 from tcla.configuration import load_training_config
 
-import tcla.model.framework.action_autoencoder_version3  # noqa: F401
+import tcla.model.framework.action_autoencoder  # noqa: F401
 from tcla.model.tools import FRAMEWORK_REGISTRY
-from tcla.training.trainer_action_space_version3 import ActionSpaceTrainer
+from tcla.training.trainer_action_space import ActionSpaceTrainer
 from tcla.training.trainer_utils import make_run_dir, set_seed
 
 

@@ -29,7 +29,7 @@ action_ae:
   stats_path: ${paths.action_ae.robotwin}/dataset_statistics.json
 datasets:
   action_data:
-    dataset_py: robotwin_policy_version3
+    dataset_py: robotwin_latent_policy
     per_device_batch_size: 64
     num_workers: 0
     pin_memory: false

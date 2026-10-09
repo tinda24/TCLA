@@ -21,7 +21,7 @@ from tcla_latent_act.model_utils import (  # noqa: F401
 )
 
 from tcla.model.framework import act_policy  # noqa: F401,E402
-from tcla.model.framework import action_autoencoder_version3  # noqa: F401,E402
+from tcla.model.framework import action_autoencoder  # noqa: F401,E402
 from tcla.model.framework import baku_policy  # noqa: F401,E402
 from tcla.model.modules.act.policy import ACTPolicyModule  # noqa: E402
 from tcla.model.tools import FRAMEWORK_REGISTRY  # noqa: E402

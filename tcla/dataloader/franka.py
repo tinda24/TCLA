@@ -13,7 +13,7 @@ from tcla.dataloader.robotwin import (
 )
 from tcla.dataloader.robotwin_ae_w_freqnorm import collate_fn as ae_collate_fn
 from tcla.dataloader.robotwin_ae_w_freqnorm import RoboTwinAEWFreqNormDataset
-from tcla.dataloader.robotwin_policy_version3 import RoboTwinPolicyVersion3Dataset
+from tcla.dataloader.robotwin_latent_policy import RoboTwinLatentPolicyDataset
 from tcla.utils.text_embedding import encode_texts_np
 from tcla.configuration import load_paths
 
@@ -175,7 +175,7 @@ class _FrankaTaskEmbMixin:
 
 
 class FrankaAEWFreqNormDataset(_FrankaTaskEmbMixin, RoboTwinAEWFreqNormDataset):
-    """Version3 Action-AE windows (mean/std + DCT freq-norm) from Franka HDF5."""
+    """Action-AE windows (mean/std + DCT freq-norm) from Franka HDF5."""
 
     def _load_episode(self, path: Path, *, accumulate_stats: bool = False):
         episode = _load_franka_episode(
@@ -218,8 +218,8 @@ class FrankaPolicyDataset(_FrankaTaskEmbMixin, RoboTwinPolicyDataset):
         return self._attach_traj_a_freq_cache(episode)
 
 
-class FrankaPolicyVersion3Dataset(_FrankaTaskEmbMixin, RoboTwinPolicyVersion3Dataset):
-    """Policy windows aligned with ActionAutoencoder version3 stats."""
+class FrankaLatentPolicyDataset(_FrankaTaskEmbMixin, RoboTwinLatentPolicyDataset):
+    """Latent policy windows aligned with action autoencoder statistics."""
 
     def _sample_start(self, episode_len: int) -> int:
         return _full_window_start(
@@ -248,7 +248,7 @@ collate_fn = policy_collate_fn
 __all__ = [
     "FrankaAEWFreqNormDataset",
     "FrankaPolicyDataset",
-    "FrankaPolicyVersion3Dataset",
+    "FrankaLatentPolicyDataset",
     "collate_fn",
     "ae_collate_fn",
     "DEFAULT_FRANKA_TASKS",

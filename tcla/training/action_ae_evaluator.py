@@ -1,4 +1,4 @@
-"""Periodic evaluation utilities for ActionAutoencoder version3 training."""
+"""Periodic evaluation utilities for action autoencoder training."""
 
 from __future__ import annotations
 
@@ -13,7 +13,7 @@ import torch.nn.functional as F
 from tcla.dataloader.frequency_encoding import trajectory_to_frequency
 
 
-def normalize_actions_version3(actions: np.ndarray, stats: dict) -> np.ndarray:
+def normalize_actions(actions: np.ndarray, stats: dict) -> np.ndarray:
     if "action_mean" in stats and "action_std" in stats:
         mean = np.asarray(stats["action_mean"], dtype=np.float32)
         std = np.asarray(stats["action_std"], dtype=np.float32)
@@ -23,7 +23,7 @@ def normalize_actions_version3(actions: np.ndarray, stats: dict) -> np.ndarray:
     return 2.0 * (actions - action_min) / (action_max - action_min + 1e-5) - 1.0
 
 
-def normalize_traj_a_freq_version3(freq: np.ndarray, stats: dict) -> np.ndarray:
+def normalize_traj_a_freq(freq: np.ndarray, stats: dict) -> np.ndarray:
     if "traj_a_freq_mean" not in stats or "traj_a_freq_std" not in stats:
         return freq.astype(np.float32)
     mean = np.asarray(stats["traj_a_freq_mean"], dtype=np.float32)
@@ -31,7 +31,7 @@ def normalize_traj_a_freq_version3(freq: np.ndarray, stats: dict) -> np.ndarray:
     return ((freq - mean) / std).astype(np.float32)
 
 
-class ActionAETrainingEvaluatorVersion3:
+class ActionAETrainingEvaluator:
     def __init__(
         self,
         cfg,
@@ -65,7 +65,7 @@ class ActionAETrainingEvaluatorVersion3:
             num_freqs=self.num_freqs,
             fft_type=self.fft_type,
         ).numpy()
-        return normalize_traj_a_freq_version3(freq, self.stats)
+        return normalize_traj_a_freq(freq, self.stats)
 
     def _traj_a_freq_for_window(self, episode: dict, prefix_len: int) -> torch.Tensor:
         freq_index = max(prefix_len - 1, 0)
@@ -74,7 +74,7 @@ class ActionAETrainingEvaluatorVersion3:
             if hasattr(self.dataset, "_preprocess_traj_a_freq"):
                 freq = self.dataset._preprocess_traj_a_freq(raw_freq)
             else:
-                freq = normalize_traj_a_freq_version3(raw_freq, self.stats)
+                freq = normalize_traj_a_freq(raw_freq, self.stats)
             return torch.from_numpy(freq.astype(np.float32))
 
         action_seq = episode["action"]
