@@ -131,6 +131,11 @@ class PolicyTrainer(TrainerUtils):
         if self.accelerator.is_main_process and csv_path is not None:
             self.accelerator.print(f"final training metrics csv: {csv_path}")
 
+    def log_metrics(self, step, metrics, *, record=True):
+        super().log_metrics(step, metrics, record=record)
+        if self.accelerator.is_main_process:
+            self.plot_metrics()
+
     def plot_metrics(self):
         metrics_path = self.run_dir / "metrics.jsonl"
         if not metrics_path.exists():
@@ -164,6 +169,30 @@ class PolicyTrainer(TrainerUtils):
             "Policy Training Loss",
             "Loss",
         )
+
+    @staticmethod
+    def _plot_metric_group(path, steps, records, keys, title, ylabel, log_scale=False):
+        import matplotlib
+
+        matplotlib.use("Agg")
+        import matplotlib.pyplot as plt
+
+        plt.figure(figsize=(10, 6))
+        for key in keys:
+            values = [record[key] for record in records if key in record]
+            if len(values) != len(steps):
+                continue
+            plt.plot(steps, values, label=key)
+        plt.title(title)
+        plt.xlabel("Step")
+        plt.ylabel(ylabel)
+        plt.grid(True, linestyle="--", alpha=0.5)
+        plt.legend()
+        if log_scale:
+            plt.yscale("log")
+        plt.tight_layout()
+        plt.savefig(path, dpi=150)
+        plt.close()
 
     def load_training_state_if_needed(self):
         if not self.cfg.trainer.get("is_resume", False):

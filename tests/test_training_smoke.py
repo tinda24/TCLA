@@ -1,3 +1,4 @@
+import csv
 import importlib
 import json
 import os
@@ -198,6 +199,16 @@ class TrainingSmokeTests(unittest.TestCase):
                             unpacked["actions"], predicted.numpy()
                         )
 
+    def test_policy_logging(self):
+        trainer = PolicyTrainer.__new__(PolicyTrainer)
+        trainer.cfg = OmegaConf.create({"trainer": {}})
+        trainer.accelerator = Accelerator(cpu=True)
+        trainer.run_dir = self.root / "policy"
+        trainer.log_metrics(1, {"action_loss": 1.0})
+        trainer.log_metrics(2, {"action_loss": 0.5})
+        self.assertTrue((trainer.run_dir / "metrics.csv").is_file())
+        self.assertTrue((trainer.run_dir / "imgs/loss_curve.png").is_file())
+
     def test_train_eval_resume(self):
         cfg, dataset, collate, model = self.make_ae("robotwin")
         cfg.trainer.max_train_steps = 2
@@ -226,11 +237,19 @@ class TrainingSmokeTests(unittest.TestCase):
         hook = model.register_forward_pre_hook(
             lambda module, inputs: training_modes.append(module.training)
         )
-        trainer.train()
+        with patch.dict(
+            "sys.modules",
+            {"matplotlib": None, "matplotlib.pyplot": None, "sklearn": None},
+        ):
+            trainer.train()
         hook.remove()
         self.assertEqual(training_modes, [True, True])
-        self.assertTrue((run / "progress_eval/eval_loss.csv").is_file())
-        self.assertTrue(list((run / "latent_tsne_eval").rglob("*.png")))
+        with (run / "progress_eval/eval_loss.csv").open(encoding="utf-8") as handle:
+            rows = list(csv.DictReader(handle))
+        self.assertEqual([int(row["step"]) for row in rows], [1, 2])
+        self.assertTrue(all(np.isfinite(float(row["total_loss"])) for row in rows))
+        self.assertTrue((run / "metrics.csv").is_file())
+        self.assertFalse(list(run.rglob("*.png")))
         cfg.trainer.is_resume = True
         cfg.trainer.resume_checkpoint = str(
             run / "checkpoints/steps_2_pytorch_model.pt"

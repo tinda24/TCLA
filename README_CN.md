@@ -63,7 +63,7 @@ bash examples/Robotwin/train_files/run_raw_act_robotwin_train.sh 0
 bash examples/Robotwin_ae/train_files/train_ae.sh 0 --trainer.max_train_steps 100
 ```
 
-验证损失保存为 CSV 文件，潜变量轨迹使用 t-SNE 绘制。
+验证损失保存为 CSV 文件。
 检查点包含模型、优化器和学习率调度器的状态。
 使用 `--trainer.is_resume true --trainer.resume_checkpoint <checkpoint>` 可恢复训练。
 

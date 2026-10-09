@@ -65,7 +65,7 @@ when running concurrent jobs. Environment overrides include `BATCH_SIZE`,
 bash examples/Robotwin_ae/train_files/train_ae.sh 0 --trainer.max_train_steps 100
 ```
 
-Validation losses are recorded as CSV; latent trajectories are plotted with t-SNE.
+Validation losses are recorded as CSV.
 Checkpoints include model, optimizer, and scheduler states. Resume with
 `--trainer.is_resume true --trainer.resume_checkpoint <checkpoint>`.
 
