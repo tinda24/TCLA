@@ -1,0 +1,12 @@
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ruff_cache/
+configs/paths.local.yaml
+data/
+results/
+external/
+.env
+*.pt
+*.pth
+*.hdf5

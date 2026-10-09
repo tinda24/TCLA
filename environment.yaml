@@ -1,0 +1,27 @@
+name: tcla
+channels:
+- conda-forge
+dependencies:
+- python=3.10
+- pip
+- pip:
+  - accelerate==1.13.0
+  - einops==0.8.2
+  - h5py==3.16.0
+  - matplotlib==3.10.8
+  - msgpack>=1.0
+  - numpy==1.26.4
+  - omegaconf==2.3.0
+  - opencv-python==4.11.0.86
+  - packaging>=24.0
+  - pillow==11.3.0
+  - pyyaml==6.0.3
+  - scikit-learn==1.7.2
+  - sentence-transformers==5.3.0
+  - torch==2.6.0
+  - torch-dct==0.1.6
+  - torchvision==0.21.0
+  - tqdm==4.67.3
+  - transformers==5.5.0
+  - typing-extensions==4.15.0
+  - websockets>=13.0

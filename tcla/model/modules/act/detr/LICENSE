@@ -1,0 +1,20 @@
+不能对 Null 值表达式调用方法。
+所在位置 行:5 字符: 1
++ $reader = [IO.StreamReader]::new($entry.Open())
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : InvalidOperation: (:) []，RuntimeException
+    + FullyQualifiedErrorId : InvokeMethodOnNull
+ 
+不能对 Null 值表达式调用方法。
+所在位置 行:6 字符: 1
++ $reader.ReadToEnd()
++ ~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : InvalidOperation: (:) []，RuntimeException
+    + FullyQualifiedErrorId : InvokeMethodOnNull
+ 
+不能对 Null 值表达式调用方法。
+所在位置 行:7 字符: 1
++ $reader.Dispose()
++ ~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : InvalidOperation: (:) []，RuntimeException
+    + FullyQualifiedErrorId : InvokeMethodOnNull

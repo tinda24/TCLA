@@ -1,0 +1,16 @@
+paths:
+  data:
+    robotwin: data/robotwin
+    franka: data/franka
+  output:
+    robotwin_ae: results/robotwin_ae_checkpoints
+    franka_ae: results/franka_ae_checkpoints
+    robotwin_policy: results/robotwin_policy_checkpoints
+    franka_policy: results/franka_policy_checkpoints
+  action_ae:
+    robotwin: results/robotwin_ae
+    franka: results/franka_ae
+  policy_run: results/robotwin_policy
+  robotwin: external/RoboTwin
+  language_model: sentence-transformers/all-MiniLM-L6-v2
+  task_embedding_cache: data/robotwin/task_embeddings.hdf5

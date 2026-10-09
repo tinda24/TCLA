@@ -1,0 +1,101 @@
+run_name: franka_latent_act
+run_root_dir: ${paths.output.franka_policy}
+seed: 0
+accelerator:
+  mixed_precision: 'no'
+  gradient_accumulation_steps: 1
+task_name:
+- 260830_bowl_separate
+- 260830_bowl_stack
+- 260830_button
+- 260830_light
+- 260830_screw
+camera_names:
+- cam_front
+- cam_right_wrist
+chunk_size: 32
+latent_action_tokens: 8
+latent_action_dim: 16
+data_root: ${paths.data.franka}
+action_ae:
+  config_yaml: ${paths.action_ae.franka}/config.yaml
+  ckpt_path: ${paths.action_ae.franka}/checkpoints/steps_${oc.env:ACTION_AE_STEP,160000}_pytorch_model.pt
+  stats_path: ${paths.action_ae.franka}/dataset_statistics.json
+datasets:
+  action_data:
+    dataset_py: franka_policy_version3
+    per_device_batch_size: 32
+    num_workers: 0
+    pin_memory: false
+    dataset:
+      path: ${data_root}
+      task_name: ${task_name}
+      camera_names: ${camera_names}
+      chunk_size: ${chunk_size}
+      action_ae_stats_path: ${action_ae.stats_path}
+      num_freqs: 48
+      fft_type: dct
+      num_episodes: 32
+      seed: ${seed}
+      task_emb_source: minilm
+      sentence_encoder_name_or_path: ${paths.language_model}
+      sentence_encoder_device: cpu
+      lang_dim: 384
+framework:
+  name: ACTPolicy
+  action_space: latent
+  action_ae_enabled: true
+  image_key: image
+  qpos_key: qpos
+  action_key: action
+  lang_key: task_emb
+  is_pad_key: is_pad
+  action_ae_config: ${action_ae.config_yaml}
+  action_ae_ckpt: ${action_ae.ckpt_path}
+  kl_weight: 10.0
+  decoded_loss_coef: 0.1
+  latent_loss_coef: 1.0
+  act_config:
+    lr: 1e-4
+    lr_backbone: 1e-5
+    weight_decay: 1e-4
+    backbone: resnet18
+    dilation: false
+    position_embedding: sine
+    camera_names: ${camera_names}
+    enc_layers: 4
+    dec_layers: 7
+    dim_feedforward: 3200
+    hidden_dim: 512
+    dropout: 0.1
+    nheads: 8
+    num_queries: ${latent_action_tokens}
+    pre_norm: false
+    masks: false
+    state_dim: 8
+    action_dim: ${latent_action_dim}
+    latent_dim: 128
+    pretrained_backbone: false
+    ckpt_dir: ${run_root_dir}
+    policy_class: ACT
+    task_name: ${task_name}
+    seed: ${seed}
+    num_epochs: 1
+    kl_weight: 10
+    chunk_size: ${chunk_size}
+    obs_image_height: 240
+    obs_image_width: 320
+trainer:
+  learning_rate:
+    base: 1e-4
+  optimizer:
+    weight_decay: 1e-4
+    betas:
+    - 0.9
+    - 0.95
+    eps: 1e-8
+  is_resume: false
+  resume_checkpoint: null
+  max_train_steps: 30000
+  log_every_steps: 50
+  save_every_steps: 5000

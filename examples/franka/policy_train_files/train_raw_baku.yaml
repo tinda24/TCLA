@@ -1,0 +1,72 @@
+run_name: franka_raw_baku
+run_root_dir: ${paths.output.franka_policy}
+seed: 0
+accelerator:
+  mixed_precision: 'no'
+  gradient_accumulation_steps: 1
+task_name:
+- 260830_bowl_separate
+- 260830_bowl_stack
+- 260830_button
+- 260830_light
+- 260830_screw
+camera_names:
+- cam_front
+- cam_right_wrist
+chunk_size: 16
+data_root: ${paths.data.franka}
+datasets:
+  action_data:
+    dataset_py: franka_policy
+    per_device_batch_size: 64
+    num_workers: 0
+    pin_memory: false
+    dataset:
+      path: ${data_root}
+      task_name: ${task_name}
+      camera_names: ${camera_names}
+      chunk_size: ${chunk_size}
+      action_ae_stats_path: null
+      num_episodes: 32
+      seed: ${seed}
+      task_emb_source: minilm
+      sentence_encoder_name_or_path: ${paths.language_model}
+      sentence_encoder_device: cpu
+      lang_dim: 384
+framework:
+  name: BakuPolicy
+  action_space: raw
+  action_ae_enabled: false
+  image_key: image
+  qpos_key: qpos
+  action_key: action
+  lang_key: task_emb
+  is_pad_key: is_pad
+  raw_loss_coef: 1.0
+  baku_config:
+    camera_names: ${camera_names}
+    state_dim: 8
+    action_dim: 8
+    num_queries: ${chunk_size}
+    hidden_dim: 512
+    enc_layers: 4
+    nheads: 8
+    dim_feedforward: 2048
+    dropout: 0.1
+    head_layers: 2
+    head_dropout: 0.0
+    pretrained_backbone: false
+trainer:
+  learning_rate:
+    base: 1e-4
+  optimizer:
+    weight_decay: 1e-4
+    betas:
+    - 0.9
+    - 0.95
+    eps: 1e-8
+  is_resume: false
+  resume_checkpoint: null
+  max_train_steps: 400100
+  log_every_steps: 100
+  save_every_steps: 50000
